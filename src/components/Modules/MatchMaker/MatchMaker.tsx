@@ -5,7 +5,6 @@ import { NEED_CATEGORY_LABELS } from '../../../types';
 import { getHeatColor, getVisitLabel } from '../../../data/mockData';
 import './MatchMaker.css';
 
-// 智能匹配算法
 function computeMatch(teamId: string, villageId: string): MatchResult | null {
   const store = useAppStore.getState();
   const team = store.teams.find((t) => t.id === teamId);
@@ -15,19 +14,17 @@ function computeMatch(teamId: string, villageId: string): MatchResult | null {
   const reasons: string[] = [];
   let score = 0;
 
-  // 1. 需求类别与团队偏好匹配 (核心权重, 50分)
   const pendingCategories = new Set(village.needs.filter((n) => n.status === 'pending').map((n) => n.category));
   const matchedCategories = team.preferredCategories.filter((c) => pendingCategories.has(c));
   const categoryScore = pendingCategories.size > 0
     ? (matchedCategories.length / pendingCategories.size) * 50
-    : 25; // 无待解决需求时给基础分
+    : 25;
 
   score += categoryScore;
   if (matchedCategories.length > 0) {
     reasons.push(`团队偏好类别与${matchedCategories.length}项乡村需求匹配：${matchedCategories.map((c) => NEED_CATEGORY_LABELS[c]).join('、')}`);
   }
 
-  // 2. 实践缺口加权 (鼓励去低频区域, 30分)
   const gapScore = village.visitCount === 0 ? 30
     : village.visitCount <= 3 ? 24
     : village.visitCount <= 7 ? 18
@@ -42,7 +39,6 @@ function computeMatch(teamId: string, villageId: string): MatchResult | null {
     reasons.push(`⚠️ 该村为高频到访区域(${village.visitCount}次)，建议考虑其他更需要帮助的乡村`);
   }
 
-  // 3. 需求紧急度加权 (20分)
   const highUrgencyCount = village.needs.filter((n) => n.status === 'pending' && n.urgency === 'high').length;
   const urgencyScore = Math.min(20, highUrgencyCount * 8 + village.needs.filter((n) => n.status === 'pending' && n.urgency === 'medium').length * 3);
   score += urgencyScore;
@@ -65,12 +61,14 @@ export default function MatchMaker() {
   const allVillages = useAppStore((s) => s.villages);
   const villages = allVillages.filter((v) => v.status === 'approved' || !v.status);
   const selectVillage = useAppStore((s) => s.selectVillage);
+  const setActiveModule = useAppStore((s) => s.setActiveModule);
   const addMessage = useAppStore((s) => s.addMessage);
 
   const [selectedTeamId, setSelectedTeamId] = useState<string>('');
   const [results, setResults] = useState<MatchResult[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
   const [strategy, setStrategy] = useState<'balanced' | 'gap_first' | 'need_first'>('gap_first');
+  const [selectedResult, setSelectedResult] = useState<MatchResult | null>(null);
 
   const selectedTeam = teams.find((t) => t.id === selectedTeamId);
 
@@ -99,14 +97,184 @@ export default function MatchMaker() {
 
     setResults(allResults);
     setHasSearched(true);
+    setSelectedResult(null);
 
     const top3 = allResults.slice(0, 3);
     addMessage({
       id: `msg_${Date.now()}`,
       role: 'agent',
-      content: `🔍 已为**${selectedTeam?.name}**完成智能匹配！\n\n共扫描 ${villages.length} 个乡村，推荐结果按${strategy === 'gap_first' ? '"实践缺口优先"' : strategy === 'need_first' ? '"需求紧急度优先"' : '"综合匹配"'}策略排序。\n\n🏆 **Top 3 推荐：**\n${top3.map((r, i) => `${i + 1}. **${r.villageName}** — 匹配度 ${r.score}分`).join('\n')}\n\n请在结果面板中查看详细信息。`,
+      content: `🔍 已为**${selectedTeam?.name}**完成智能匹配！\n\n共扫描 ${villages.length} 个乡村，推荐结果按${strategy === 'gap_first' ? '"实践缺口优先"' : strategy === 'need_first' ? '"需求紧急度优先"' : '"综合匹配"'}策略排序。\n\n🏆 **Top 3 推荐：**\n${top3.map((r, i) => `${i + 1}. **${r.villageName}** — 匹配度 ${r.score}分`).join('\n')}\n\n请在结果面板中查看详细信息，点击结果卡片可查看详细对比。`,
       timestamp: Date.now(),
     });
+  }
+
+  function handleViewOnMap(villageId: string) {
+    selectVillage(villageId);
+    setActiveModule('idle');
+  }
+
+  function handleGeneratePlan(villageId: string) {
+    selectVillage(villageId);
+    setActiveModule('plan');
+  }
+
+  // Match detail panel
+  if (selectedResult) {
+    const village = villages.find((v) => v.id === selectedResult.villageId);
+    const team = teams.find((t) => t.id === selectedResult.teamId);
+    if (!village || !team) {
+      setSelectedResult(null);
+      return null;
+    }
+
+    return (
+      <div className="module-panel match-maker">
+        <div className="match-detail-panel">
+          <div className="match-detail-header">
+            <button className="back-btn" onClick={() => setSelectedResult(null)}>← 返回结果列表</button>
+            <div className="match-detail-score">
+              <span className="detail-score-num">{selectedResult.score}</span>
+              <span className="detail-score-label">匹配度</span>
+            </div>
+          </div>
+
+          <h3 className="match-detail-title">
+            {team.name} ↔ {village.name}
+          </h3>
+
+          <div className="match-detail-reasons">
+            {selectedResult.reasons.map((reason, i) => (
+              <div key={i} className="reason-item">
+                {reason.startsWith('⚠️') ? '⚠️ ' : '✓ '}{reason}
+              </div>
+            ))}
+          </div>
+
+          <div className="match-detail-columns">
+            {/* Team capabilities */}
+            <div className="match-detail-col team-col">
+              <div className="col-header">
+                <span className="col-icon">👥</span>
+                <span>队伍能力</span>
+              </div>
+              <div className="col-body">
+                <div className="detail-field">
+                  <span className="field-label">队伍名称</span>
+                  <span className="field-value">{team.name}</span>
+                </div>
+                <div className="detail-field">
+                  <span className="field-label">所属院校</span>
+                  <span className="field-value">{team.university}</span>
+                </div>
+                <div className="detail-field">
+                  <span className="field-label">成员人数</span>
+                  <span className="field-value">{team.memberCount}人</span>
+                </div>
+                <div className="detail-field">
+                  <span className="field-label">历史完成</span>
+                  <span className="field-value">{team.completedCount}次实践</span>
+                </div>
+                {team.description && (
+                  <div className="detail-field">
+                    <span className="field-label">简介</span>
+                    <span className="field-value desc">{team.description}</span>
+                  </div>
+                )}
+                {team.skills.length > 0 && (
+                  <div className="detail-field">
+                    <span className="field-label">技能标签</span>
+                    <div className="detail-tags">
+                      {team.skills.map((s) => (
+                        <span key={s} className="skill-tag">{s}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {team.preferredCategories.length > 0 && (
+                  <div className="detail-field">
+                    <span className="field-label">偏好领域</span>
+                    <div className="detail-tags">
+                      {team.preferredCategories.map((c) => (
+                        <span key={c} className="pref-tag">{NEED_CATEGORY_LABELS[c]}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Village needs */}
+            <div className="match-detail-col village-col">
+              <div className="col-header">
+                <span className="col-icon">🏘️</span>
+                <span>乡村需求</span>
+              </div>
+              <div className="col-body">
+                <div className="detail-field">
+                  <span className="field-label">村庄名称</span>
+                  <span className="field-value">{village.name}</span>
+                </div>
+                <div className="detail-field">
+                  <span className="field-label">位置</span>
+                  <span className="field-value">{village.province} {village.city} {village.county}</span>
+                </div>
+                <div className="detail-field">
+                  <span className="field-label">人口</span>
+                  <span className="field-value">{village.population}人</span>
+                </div>
+                <div className="detail-field">
+                  <span className="field-label">历史到访</span>
+                  <span className="field-value">
+                    <span className="detail-badge" style={{ background: getHeatColor(village.visitCount), color: '#fff' }}>
+                      {getVisitLabel(village.visitCount)}
+                    </span>
+                  </span>
+                </div>
+                {village.description && (
+                  <div className="detail-field">
+                    <span className="field-label">简介</span>
+                    <span className="field-value desc">{village.description}</span>
+                  </div>
+                )}
+                <div className="detail-field">
+                  <span className="field-label">需求列表</span>
+                </div>
+                {village.needs.length === 0 ? (
+                  <p className="no-needs">暂无需求</p>
+                ) : (
+                  <div className="detail-needs-list">
+                    {village.needs.map((n) => (
+                      <div key={n.id} className={`detail-need-card ${n.urgency}`}>
+                        <div className="detail-need-header">
+                          <span className="vd-need-cat">{NEED_CATEGORY_LABELS[n.category]}</span>
+                          <span className={`vd-need-urgency ${n.urgency}`}>
+                            {n.urgency === 'high' ? '紧急' : n.urgency === 'medium' ? '一般' : '不急'}
+                          </span>
+                          <span className={`vd-need-status ${n.status}`}>
+                            {n.status === 'pending' ? '待匹配' : n.status === 'matched' ? '已匹配' : '已完成'}
+                          </span>
+                        </div>
+                        <div className="detail-need-title">{n.title}</div>
+                        {n.description && <div className="detail-need-desc">{n.description}</div>}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="match-detail-actions">
+            <button className="action-map-btn" onClick={() => handleViewOnMap(village.id)}>
+              🗺️ 在地图查看
+            </button>
+            <button className="action-plan-btn" onClick={() => handleGeneratePlan(village.id)}>
+              📝 生成实践方案
+            </button>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -121,7 +289,7 @@ export default function MatchMaker() {
           <label>选择实践队伍</label>
           <select
             value={selectedTeamId}
-            onChange={(e) => { setSelectedTeamId(e.target.value); setHasSearched(false); setResults([]); }}
+            onChange={(e) => { setSelectedTeamId(e.target.value); setHasSearched(false); setResults([]); setSelectedResult(null); }}
           >
             <option value="">请选择队伍</option>
             {teams.map((t) => (
@@ -199,7 +367,7 @@ export default function MatchMaker() {
                   <div
                     key={r.villageId}
                     className={`result-card ${idx < 3 ? 'top-recommend' : ''}`}
-                    onClick={() => selectVillage(r.villageId)}
+                    onClick={() => setSelectedResult(r)}
                   >
                     <div className="result-rank">
                       {idx < 3 ? ['🥇', '🥈', '🥉'][idx] : `#${idx + 1}`}
@@ -233,6 +401,7 @@ export default function MatchMaker() {
                           </span>
                         ))}
                       </div>
+                      <div className="result-click-hint">点击查看详细对比 →</div>
                     </div>
                   </div>
                 );

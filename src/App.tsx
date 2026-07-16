@@ -10,6 +10,8 @@ import MatchMaker from './components/Modules/MatchMaker/MatchMaker';
 import PlanGenerator from './components/Modules/PlanGenerator/PlanGenerator';
 import CreateTeam from './components/Modules/CreateTeam/CreateTeam';
 import CreateVillage from './components/Modules/CreateVillage/CreateVillage';
+import ManageTeams from './components/Modules/ManageTeams/ManageTeams';
+import ManageVillages from './components/Modules/ManageVillages/ManageVillages';
 import './App.css';
 
 class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
@@ -39,6 +41,8 @@ function ModuleContent() {
     case 'plan': return <PlanGenerator />;
     case 'create_team': return <CreateTeam />;
     case 'create_village': return <CreateVillage />;
+    case 'manage_teams': return <ManageTeams />;
+    case 'manage_villages': return <ManageVillages />;
     default: return null;
   }
 }

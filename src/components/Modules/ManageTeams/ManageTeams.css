@@ -1,0 +1,335 @@
+/* ===== ManageTeams ===== */
+.manage-teams .mgmt-actions-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.create-link-btn {
+  padding: 8px 16px;
+  border: 1.5px dashed #4299e1;
+  border-radius: 8px;
+  background: #ebf8ff;
+  color: #2b6cb0;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.create-link-btn:hover {
+  background: #bee3f8;
+  border-style: solid;
+}
+
+.mgmt-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mgmt-card {
+  padding: 14px;
+  border-radius: 10px;
+  border: 1.5px solid #e2e8f0;
+  background: #fff;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.mgmt-card:hover {
+  border-color: #4299e1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.mgmt-card.editing {
+  cursor: default;
+  border-color: #4299e1;
+  background: #f7fafc;
+  padding: 16px;
+}
+
+.mgmt-card.confirming {
+  cursor: default;
+  border-color: #fc8181;
+  background: #fff5f5;
+}
+
+.mgmt-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.mgmt-card-title {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mgmt-card-name {
+  font-weight: 700;
+  font-size: 14px;
+  color: #1a202c;
+}
+
+.mgmt-card-uni {
+  font-size: 12px;
+  color: #718096;
+}
+
+.mgmt-card-meta {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.meta-chip {
+  padding: 2px 8px;
+  border-radius: 8px;
+  background: #edf2f7;
+  color: #4a5568;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.mgmt-card-body {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.mgmt-card-desc {
+  margin: 0 0 8px;
+  font-size: 12px;
+  color: #4a5568;
+  line-height: 1.5;
+}
+
+.mgmt-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.mgmt-card .skill-tag {
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: #ebf4ff;
+  color: #2b6cb0;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.mgmt-card .pref-tag {
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: #f0fff4;
+  color: #276749;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.mgmt-card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.edit-btn, .delete-btn, .save-btn, .cancel-btn, .delete-confirm-btn {
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s;
+}
+
+.edit-btn {
+  background: #ebf8ff;
+  color: #2b6cb0;
+}
+
+.edit-btn:hover {
+  background: #bee3f8;
+}
+
+.delete-btn {
+  background: #fff5f5;
+  color: #c53030;
+}
+
+.delete-btn:hover {
+  background: #fed7d7;
+}
+
+.save-btn {
+  background: #2f855a;
+  color: #fff;
+}
+
+.save-btn:hover {
+  background: #276749;
+}
+
+.cancel-btn {
+  background: #e2e8f0;
+  color: #4a5568;
+}
+
+.cancel-btn:hover {
+  background: #cbd5e0;
+}
+
+.delete-confirm-btn {
+  background: #c53030;
+  color: #fff;
+}
+
+.delete-confirm-btn:hover {
+  background: #9b2c2c;
+}
+
+.mgmt-card.confirming p {
+  margin: 0 0 4px;
+  font-size: 13px;
+  color: #4a5568;
+}
+
+.mgmt-empty {
+  text-align: center;
+  padding: 48px 20px;
+  color: #a0aec0;
+}
+
+.mgmt-empty .empty-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.mgmt-empty p {
+  margin: 0 0 16px;
+  font-size: 14px;
+}
+
+.mgmt-empty button {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #4299e1;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.mgmt-empty button:hover {
+  background: #3182ce;
+}
+
+/* Reuse form patterns from CreateTeam */
+.mgmt-card.editing .form-group {
+  margin-bottom: 12px;
+}
+
+.mgmt-card.editing .form-group label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #4a5568;
+  margin-bottom: 4px;
+}
+
+.mgmt-card.editing .form-group input[type="text"],
+.mgmt-card.editing .form-group textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 13px;
+  box-sizing: border-box;
+}
+
+.mgmt-card.editing .form-group textarea {
+  resize: vertical;
+}
+
+.mgmt-card.editing .required {
+  color: #e53e3e;
+}
+
+.skill-input-row {
+  display: flex;
+  gap: 6px;
+}
+
+.skill-input-row input {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.add-skill-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  background: #4299e1;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.skill-tags-display {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.skill-tag-removable {
+  padding: 3px 10px;
+  border-radius: 12px;
+  background: #ebf4ff;
+  color: #2b6cb0;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.skill-tag-removable:hover {
+  background: #fc8181;
+  color: #fff;
+}
+
+.category-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.category-chip {
+  padding: 5px 10px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fff;
+  color: #4a5568;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.category-chip.active {
+  border-color: #2b6cb0;
+  background: #ebf8ff;
+  color: #2b6cb0;
+  font-weight: 600;
+}

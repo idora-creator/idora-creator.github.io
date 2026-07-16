@@ -63,3 +63,35 @@ export async function addMatchRecord(
   });
   if (error) throw error;
 }
+
+export async function updateTeam(
+  id: string,
+  updates: {
+    name?: string;
+    university?: string;
+    memberCount?: number;
+    skills?: string[];
+    preferredCategories?: string[];
+    description?: string;
+    completedCount?: number;
+  }
+): Promise<void> {
+  const row: Record<string, unknown> = {};
+  if (updates.name !== undefined) row.name = updates.name;
+  if (updates.university !== undefined) row.university = updates.university;
+  if (updates.memberCount !== undefined) row.member_count = updates.memberCount;
+  if (updates.skills !== undefined) row.skills = updates.skills;
+  if (updates.preferredCategories !== undefined) row.preferred_categories = updates.preferredCategories;
+  if (updates.description !== undefined) row.description = updates.description;
+  if (updates.completedCount !== undefined) row.completed_count = updates.completedCount;
+
+  if (Object.keys(row).length > 0) {
+    const { error } = await supabase.from('teams').update(row).eq('id', id);
+    if (error) throw error;
+  }
+}
+
+export async function deleteTeam(id: string): Promise<void> {
+  const { error } = await supabase.from('teams').delete().eq('id', id);
+  if (error) throw error;
+}

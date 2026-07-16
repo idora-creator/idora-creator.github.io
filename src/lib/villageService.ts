@@ -112,3 +112,103 @@ export async function updateNeedStatus(
     .eq('id', needId);
   if (error) throw error;
 }
+
+export async function createVillage(village: Village): Promise<void> {
+  const { error: vErr } = await supabase.from('villages').insert({
+    id: village.id,
+    name: village.name,
+    province: village.province,
+    city: village.city,
+    county: village.county,
+    lat: village.lat,
+    lng: village.lng,
+    visit_count: village.visitCount,
+    population: village.population,
+    description: village.description,
+    status: village.status,
+    created_at: village.createdAt,
+  });
+  if (vErr) throw vErr;
+
+  if (village.needs.length > 0) {
+    const needsRows = village.needs.map((n) => ({
+      id: n.id,
+      village_id: village.id,
+      category: n.category,
+      title: n.title,
+      description: n.description,
+      urgency: n.urgency,
+      status: n.status,
+      created_at: n.createdAt,
+    }));
+    const { error: nErr } = await supabase.from('village_needs').insert(needsRows);
+    if (nErr) throw nErr;
+  }
+}
+
+export async function updateVillage(
+  id: string,
+  updates: {
+    name?: string;
+    city?: string;
+    county?: string;
+    lat?: number;
+    lng?: number;
+    population?: number;
+    description?: string;
+    needs?: VillageNeed[];
+  }
+): Promise<void> {
+  const row: Record<string, unknown> = {};
+  if (updates.name !== undefined) row.name = updates.name;
+  if (updates.city !== undefined) row.city = updates.city;
+  if (updates.county !== undefined) row.county = updates.county;
+  if (updates.lat !== undefined) row.lat = updates.lat;
+  if (updates.lng !== undefined) row.lng = updates.lng;
+  if (updates.population !== undefined) row.population = updates.population;
+  if (updates.description !== undefined) row.description = updates.description;
+
+  if (Object.keys(row).length > 0) {
+    const { error } = await supabase.from('villages').update(row).eq('id', id);
+    if (error) throw error;
+  }
+
+  if (updates.needs !== undefined) {
+    const { error: delErr } = await supabase
+      .from('village_needs')
+      .delete()
+      .eq('village_id', id);
+    if (delErr) throw delErr;
+
+    if (updates.needs.length > 0) {
+      const needsRows = updates.needs.map((n) => ({
+        id: n.id,
+        village_id: id,
+        category: n.category,
+        title: n.title,
+        description: n.description,
+        urgency: n.urgency,
+        status: n.status,
+        created_at: n.createdAt,
+      }));
+      const { error: insErr } = await supabase.from('village_needs').insert(needsRows);
+      if (insErr) throw insErr;
+    }
+  }
+}
+
+export async function deleteVillage(id: string): Promise<void> {
+  const { error } = await supabase.from('villages').delete().eq('id', id);
+  if (error) throw error;
+}
+
+export async function updateVillageStatus(
+  id: string,
+  status: string
+): Promise<void> {
+  const { error } = await supabase
+    .from('villages')
+    .update({ status })
+    .eq('id', id);
+  if (error) throw error;
+}

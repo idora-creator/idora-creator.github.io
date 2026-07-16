@@ -48,6 +48,20 @@ export default function Sidebar() {
         content: '已切换到**🏘️ 登记村庄**模块。请填写未覆盖的村庄信息，提交后需管理员审核通过，才会上线到地图。',
         timestamp: Date.now(),
       });
+    } else if (key === 'manage_teams') {
+      addMessage({
+        id: `msg_${Date.now()}`,
+        role: 'agent',
+        content: '已切换到**📋 队伍管理**模块。可查看、编辑或删除已注册的实践队伍信息。',
+        timestamp: Date.now(),
+      });
+    } else if (key === 'manage_villages') {
+      addMessage({
+        id: `msg_${Date.now()}`,
+        role: 'agent',
+        content: '已切换到**📂 村庄管理**模块。可审核村庄申请、编辑信息或删除村庄。',
+        timestamp: Date.now(),
+      });
     } else {
       const mod = modules.find((m) => m.key === key);
       if (mod) {
@@ -146,6 +160,32 @@ export default function Sidebar() {
                 <div className="nav-text">
                   <span className="nav-label">创建队伍</span>
                   <span className="nav-desc">注册新实践团队</span>
+                </div>
+              )}
+            </button>
+
+            <button
+              className={`nav-item ${activeModule === 'manage_teams' ? 'active' : ''}`}
+              onClick={() => handleModuleClick('manage_teams')}
+            >
+              <span className="nav-icon">📋</span>
+              {sidebarOpen && (
+                <div className="nav-text">
+                  <span className="nav-label">队伍管理</span>
+                  <span className="nav-desc">编辑与删除队伍</span>
+                </div>
+              )}
+            </button>
+
+            <button
+              className={`nav-item ${activeModule === 'manage_villages' ? 'active' : ''}`}
+              onClick={() => handleModuleClick('manage_villages')}
+            >
+              <span className="nav-icon">📂</span>
+              {sidebarOpen && (
+                <div className="nav-text">
+                  <span className="nav-label">村庄管理</span>
+                  <span className="nav-desc">审核与编辑村庄</span>
                 </div>
               )}
             </button>

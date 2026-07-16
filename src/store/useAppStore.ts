@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import type { Village, Team, AgentModule, MatchResult, VillageNeed, AgentMessage } from '../types';
 import { mockVillages, mockTeams } from '../data/mockData';
-import { fetchAllVillages, addVillageNeed, updateNeedStatus } from '../lib/villageService';
-import { fetchAllTeams, createTeam } from '../lib/teamService';
+import { fetchAllVillages, addVillageNeed, updateNeedStatus, createVillage, updateVillage, deleteVillage, updateVillageStatus } from '../lib/villageService';
+import { fetchAllTeams, createTeam, updateTeam, deleteTeam } from '../lib/teamService';
 
 interface AppState {
   // 数据
@@ -33,9 +33,13 @@ interface AppState {
   setAgentTyping: (typing: boolean) => void;
   addNeed: (villageId: string, need: VillageNeed) => void;
   addTeam: (team: Team) => Promise<void>;
-  addVillage: (village: Village) => void;
+  addVillage: (village: Village) => Promise<void>;
   approveVillage: (villageId: string) => void;
   rejectVillage: (villageId: string) => void;
+  updateVillageAction: (id: string, updates: Partial<Village>) => Promise<void>;
+  deleteVillageAction: (id: string) => Promise<void>;
+  updateTeamAction: (id: string, updates: Partial<Team>) => Promise<void>;
+  deleteTeamAction: (id: string) => Promise<void>;
   updateNeedStatusAction: (villageId: string, needId: string, status: VillageNeed['status']) => void;
   setMatchResults: (results: MatchResult[]) => void;
 
@@ -147,8 +151,14 @@ export const useAppStore = create<AppState>((set, get) => ({
     );
   },
 
-  addVillage: (village) => {
+  addVillage: async (village) => {
     set((s) => ({ villages: [...s.villages, village] }));
+    const { dbReady } = get();
+    if (dbReady) {
+      createVillage(village).catch((err) =>
+        console.error('创建村庄失败', err)
+      );
+    }
   },
 
   approveVillage: (villageId) => {
@@ -157,6 +167,9 @@ export const useAppStore = create<AppState>((set, get) => ({
         v.id === villageId ? { ...v, status: 'approved' as const } : v
       ),
     }));
+    updateVillageStatus(villageId, 'approved').catch((err) =>
+      console.error('更新村庄状态失败', err)
+    );
   },
 
   rejectVillage: (villageId) => {
@@ -165,6 +178,91 @@ export const useAppStore = create<AppState>((set, get) => ({
         v.id === villageId ? { ...v, status: 'rejected' as const } : v
       ),
     }));
+    updateVillageStatus(villageId, 'rejected').catch((err) =>
+      console.error('更新村庄状态失败', err)
+    );
+  },
+
+  updateVillageAction: async (id, updates) => {
+    set((s) => ({
+      villages: s.villages.map((v) =>
+        v.id === id ? { ...v, ...updates } : v
+      ),
+    }));
+    const { dbReady } = get();
+    if (dbReady) {
+      const payload: {
+        name?: string;
+        city?: string;
+        county?: string;
+        lat?: number;
+        lng?: number;
+        population?: number;
+        description?: string;
+        needs?: VillageNeed[];
+      } = {};
+      if (updates.name !== undefined) payload.name = updates.name;
+      if (updates.city !== undefined) payload.city = updates.city;
+      if (updates.county !== undefined) payload.county = updates.county;
+      if (updates.lat !== undefined) payload.lat = updates.lat;
+      if (updates.lng !== undefined) payload.lng = updates.lng;
+      if (updates.population !== undefined) payload.population = updates.population;
+      if (updates.description !== undefined) payload.description = updates.description;
+      if (updates.needs !== undefined) payload.needs = updates.needs;
+      updateVillage(id, payload).catch((err) =>
+        console.error('更新村庄失败', err)
+      );
+    }
+  },
+
+  deleteVillageAction: async (id) => {
+    set((s) => ({ villages: s.villages.filter((v) => v.id !== id) }));
+    const { dbReady } = get();
+    if (dbReady) {
+      deleteVillage(id).catch((err) =>
+        console.error('删除村庄失败', err)
+      );
+    }
+  },
+
+  updateTeamAction: async (id, updates) => {
+    set((s) => ({
+      teams: s.teams.map((t) =>
+        t.id === id ? { ...t, ...updates } : t
+      ),
+    }));
+    const { dbReady } = get();
+    if (dbReady) {
+      const payload: {
+        name?: string;
+        university?: string;
+        memberCount?: number;
+        skills?: string[];
+        preferredCategories?: string[];
+        description?: string;
+        completedCount?: number;
+      } = {};
+      if (updates.name !== undefined) payload.name = updates.name;
+      if (updates.university !== undefined) payload.university = updates.university;
+      if (updates.memberCount !== undefined) payload.memberCount = updates.memberCount;
+      if (updates.skills !== undefined) payload.skills = updates.skills;
+      if (updates.preferredCategories !== undefined) payload.preferredCategories = updates.preferredCategories;
+      if (updates.description !== undefined) payload.description = updates.description;
+      if (updates.completedCount !== undefined) payload.completedCount = updates.completedCount;
+      updateTeam(id, payload).catch((err) =>
+        console.error('更新队伍失败', err)
+      );
+    }
+  },
+
+  deleteTeamAction: async (id) => {
+    set((s) => ({ teams: s.teams.filter((t) => t.id !== id) }));
+    const { dbReady } = get();
+    if (dbReady) {
+      deleteTeam(id).catch((err) =>
+        console.error('删除队伍失败', err)
+      );
+    }
   },
 
   getSelectedVillage: () => {

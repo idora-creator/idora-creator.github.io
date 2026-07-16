@@ -109,4 +109,4 @@ export interface AgentMessage {
   timestamp: number;
 }
 
-export type AgentModule = 'needs_report' | 'match' | 'plan' | 'create_team' | 'create_village' | 'idle';
+export type AgentModule = 'needs_report' | 'match' | 'plan' | 'create_team' | 'create_village' | 'manage_teams' | 'manage_villages' | 'idle';
