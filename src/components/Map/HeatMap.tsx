@@ -60,7 +60,8 @@ export default function HeatMap() {
   const markersLayer = useRef<L.LayerGroup | null>(null);
   const geoLayer = useRef<L.GeoJSON | null>(null);
 
-  const villages = useAppStore((s) => s.villages.filter((v) => v.status === 'approved'));
+  const allVillages = useAppStore((s) => s.villages);
+  const villages = allVillages.filter((v) => v.status === 'approved' || !v.status);
   const selectedVillageId = useAppStore((s) => s.selectedVillageId);
   const selectVillage = useAppStore((s) => s.selectVillage);
 

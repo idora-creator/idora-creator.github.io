@@ -18,7 +18,7 @@ export default function Sidebar() {
   const addMessage = useAppStore((s) => s.addMessage);
   const villages = useAppStore((s) => s.villages);
 
-  const approved = villages.filter((v) => v.status === 'approved');
+  const approved = villages.filter((v) => v.status === 'approved' || !v.status);
   let pendingNeedsCount = 0;
   let grayCount = 0;
   for (const v of approved) {

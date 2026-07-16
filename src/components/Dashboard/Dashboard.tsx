@@ -10,7 +10,7 @@ export default function Dashboard() {
   const rejectVillage = useAppStore((s) => s.rejectVillage);
   const addMessage = useAppStore((s) => s.addMessage);
 
-  const approved = villages.filter((v) => v.status === 'approved');
+  const approved = villages.filter((v) => v.status === 'approved' || !v.status);
   const pending = villages.filter((v) => v.status === 'pending');
 
   let grayCount = 0;

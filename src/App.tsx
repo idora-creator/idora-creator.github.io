@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, Component, type ReactNode } from 'react';
 import { useAppStore } from './store/useAppStore';
 import Sidebar from './components/Layout/Sidebar';
 import HeatMap from './components/Map/HeatMap';
@@ -11,6 +11,25 @@ import PlanGenerator from './components/Modules/PlanGenerator/PlanGenerator';
 import CreateTeam from './components/Modules/CreateTeam/CreateTeam';
 import CreateVillage from './components/Modules/CreateVillage/CreateVillage';
 import './App.css';
+
+class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
+  state = { error: null as Error | null };
+  static getDerivedStateFromError(error: Error) {
+    return { error };
+  }
+  render() {
+    if (this.state.error) {
+      return (
+        <div style={{ padding: 40, fontFamily: 'monospace', color: '#e53e3e', background: '#fff', minHeight: '100vh' }}>
+          <h2>程序崩溃</h2>
+          <pre style={{ whiteSpace: 'pre-wrap', fontSize: 13 }}>{this.state.error.message}</pre>
+          <pre style={{ whiteSpace: 'pre-wrap', fontSize: 11, color: '#718096', marginTop: 12 }}>{this.state.error.stack}</pre>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 function ModuleContent() {
   const activeModule = useAppStore((s) => s.activeModule);
@@ -70,6 +89,7 @@ export default function App() {
   }, []);
 
   return (
+    <ErrorBoundary>
     <div className="app-layout">
       {/* 侧边栏 (桌面端常驻, 手机端抽屉) */}
       <Sidebar />
@@ -132,5 +152,6 @@ export default function App() {
         </div>
       </div>
     </div>
+    </ErrorBoundary>
   );
 }
