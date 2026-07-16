@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, useMemo } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useAppStore } from '../../store/useAppStore';
@@ -61,7 +61,7 @@ export default function HeatMap() {
   const geoLayer = useRef<L.GeoJSON | null>(null);
 
   const allVillages = useAppStore((s) => s.villages);
-  const villages = allVillages.filter((v) => v.status === 'approved' || !v.status);
+  const villages = useMemo(() => allVillages.filter((v) => v.status === 'approved' || !v.status), [allVillages]);
   const selectedVillageId = useAppStore((s) => s.selectedVillageId);
   const selectVillage = useAppStore((s) => s.selectVillage);
 

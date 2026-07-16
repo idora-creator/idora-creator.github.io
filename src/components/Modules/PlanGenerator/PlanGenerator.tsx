@@ -7,7 +7,8 @@ import { generatePlanWithAI } from '../../../lib/chatService';
 import './PlanGenerator.css';
 
 export default function PlanGenerator() {
-  const villages = useAppStore((s) => s.villages.filter((v) => v.status === 'approved' || !v.status));
+  const allVillages = useAppStore((s) => s.villages);
+  const villages = allVillages.filter((v) => v.status === 'approved' || !v.status);
   const teams = useAppStore((s) => s.teams);
   const addMessage = useAppStore((s) => s.addMessage);
 
