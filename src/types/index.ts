@@ -1,5 +1,7 @@
 // ===== 数据模型类型定义 =====
 
+export type VillageStatus = 'pending' | 'approved' | 'rejected';
+
 export interface Village {
   id: string;
   name: string;
@@ -14,6 +16,8 @@ export interface Village {
   needs: VillageNeed[];
   /** 已被匹配的实践队伍 ID 列表 */
   matchedTeamIds: string[];
+  status: VillageStatus;
+  createdAt: string;
 }
 
 export interface VillageNeed {
@@ -105,4 +109,4 @@ export interface AgentMessage {
   timestamp: number;
 }
 
-export type AgentModule = 'needs_report' | 'match' | 'plan' | 'create_team' | 'idle';
+export type AgentModule = 'needs_report' | 'match' | 'plan' | 'create_team' | 'create_village' | 'idle';

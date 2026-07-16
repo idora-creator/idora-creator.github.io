@@ -108,7 +108,7 @@ export default function AgentPanel() {
 
       <div className="agent-input-area">
         <div className="quick-actions">
-          {['推荐乡村', '上报需求', '生成方案', '创建队伍'].map((action) => (
+          {['推荐乡村', '上报需求', '生成方案', '创建队伍', '登记村庄'].map((action) => (
             <button
               key={action}
               className="quick-chip"

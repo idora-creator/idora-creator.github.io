@@ -12,6 +12,8 @@ export interface VillageRow {
   visit_count: number;
   population: number;
   description: string;
+  status?: string;
+  created_at?: string;
 }
 
 export interface NeedRow {
@@ -47,6 +49,8 @@ function rowToVillage(row: VillageRow, needs: NeedRow[], matchedTeamIds: string[
       createdAt: n.created_at,
     })),
     matchedTeamIds,
+    status: (row.status as Village['status']) || 'approved',
+    createdAt: row.created_at || '2026-01-01',
   };
 }
 

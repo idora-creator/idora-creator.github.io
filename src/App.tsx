@@ -9,6 +9,7 @@ import NeedsReport from './components/Modules/NeedsReport/NeedsReport';
 import MatchMaker from './components/Modules/MatchMaker/MatchMaker';
 import PlanGenerator from './components/Modules/PlanGenerator/PlanGenerator';
 import CreateTeam from './components/Modules/CreateTeam/CreateTeam';
+import CreateVillage from './components/Modules/CreateVillage/CreateVillage';
 import './App.css';
 
 function ModuleContent() {
@@ -18,6 +19,7 @@ function ModuleContent() {
     case 'match': return <MatchMaker />;
     case 'plan': return <PlanGenerator />;
     case 'create_team': return <CreateTeam />;
+    case 'create_village': return <CreateVillage />;
     default: return null;
   }
 }

@@ -134,7 +134,8 @@ ${needList || '暂无特定需求，需要综合调研'}
 
 ## 要求
 - 实践时长：${days}天
-- 生成一份完整的实践方案，包含：实践目标（3-5条）、每日日程安排（${days}天，每天分上午/下午/晚间）、经费预算明细、三阶段时间规划（前期准备/实地实践/后期总结）
+- 经费预算总额严格控制在**3000元以内**，按实际乡镇物价水平合理分配（交通、食宿、物料、保险等）
+- 生成一份完整的实践方案，包含：实践目标（3-5条）、每日日程安排（${days}天，每天分上午/下午/晚间）、经费预算明细（每项金额需真实合理）、三阶段时间规划（前期准备/实地实践/后期总结）
 
 请返回纯JSON格式，不要markdown代码块，结构如下：
 {
@@ -146,8 +147,8 @@ ${needList || '暂无特定需求，需要综合调研'}
     { "day": 1, "morning": "...", "afternoon": "...", "evening": "..." }
   ],
   "budget": {
-    "total": 5000,
-    "items": [{ "name": "交通费", "amount": 1000 }]
+    "total": 2800,
+    "items": [{ "name": "交通费", "amount": 600 }, { "name": "食宿费", "amount": 1200 }]
   },
   "schedule": [
     { "phase": "前期准备", "days": "出发前2周", "tasks": ["任务1", "任务2"] }
@@ -223,13 +224,22 @@ function generatePlanFallback(village: Village, team: Team, days: number): Pract
     activities[activities.length - 1].evening = '团队总结与返程准备';
   }
 
+  const transportFee = 60 * team.memberCount;
+  const lodgingFee = 20 * team.memberCount * days;
+  const mealFee = 22 * team.memberCount * days;
+  const materialFee = 200;
+  const insuranceFee = 8 * team.memberCount;
+  const emergencyFund = 200;
+  let rawTotal = transportFee + lodgingFee + mealFee + materialFee + insuranceFee + emergencyFund;
+  if (rawTotal > 3000) rawTotal = 3000;
+
   const budgetItems = [
-    { name: '交通费（往返）', amount: 200 * team.memberCount },
-    { name: '住宿费', amount: 60 * team.memberCount * days },
-    { name: '伙食费', amount: 50 * team.memberCount * days },
-    { name: '活动物料费', amount: 500 },
-    { name: '保险费用', amount: 15 * team.memberCount },
-    { name: '应急备用金', amount: 300 },
+    { name: '交通费（往返）', amount: transportFee },
+    { name: '住宿费（学校/村舍）', amount: lodgingFee },
+    { name: '伙食费（自炊/村食堂）', amount: mealFee },
+    { name: '活动物料费', amount: materialFee },
+    { name: '保险费用', amount: insuranceFee },
+    { name: '应急备用金', amount: emergencyFund },
   ];
 
   return {
@@ -238,7 +248,7 @@ function generatePlanFallback(village: Village, team: Team, days: number): Pract
     duration: `${days}天`,
     objectives,
     activities,
-    budget: { total: budgetItems.reduce((s, i) => s + i.amount, 0), items: budgetItems },
+    budget: { total: rawTotal, items: budgetItems },
     schedule: [
       { phase: '前期准备', days: '出发前2周', tasks: ['联系村委确认行程', '物资采购与方案细化', '团队成员分工与培训', '购买保险，报备学校'] },
       { phase: '实地实践', days: `第1-${days}天`, tasks: ['按日程开展调研与服务活动', '每日记录与影像留存', '中期小结与方案调整'] },

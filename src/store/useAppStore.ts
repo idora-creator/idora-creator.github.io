@@ -33,11 +33,16 @@ interface AppState {
   setAgentTyping: (typing: boolean) => void;
   addNeed: (villageId: string, need: VillageNeed) => void;
   addTeam: (team: Team) => Promise<void>;
+  addVillage: (village: Village) => void;
+  approveVillage: (villageId: string) => void;
+  rejectVillage: (villageId: string) => void;
   updateNeedStatusAction: (villageId: string, needId: string, status: VillageNeed['status']) => void;
   setMatchResults: (results: MatchResult[]) => void;
 
   // 派生数据
   getSelectedVillage: () => Village | undefined;
+  getApprovedVillages: () => Village[];
+  getPendingVillages: () => Village[];
 }
 
 let msgId = 0;
@@ -142,8 +147,36 @@ export const useAppStore = create<AppState>((set, get) => ({
     );
   },
 
+  addVillage: (village) => {
+    set((s) => ({ villages: [...s.villages, village] }));
+  },
+
+  approveVillage: (villageId) => {
+    set((s) => ({
+      villages: s.villages.map((v) =>
+        v.id === villageId ? { ...v, status: 'approved' as const } : v
+      ),
+    }));
+  },
+
+  rejectVillage: (villageId) => {
+    set((s) => ({
+      villages: s.villages.map((v) =>
+        v.id === villageId ? { ...v, status: 'rejected' as const } : v
+      ),
+    }));
+  },
+
   getSelectedVillage: () => {
     const { villages, selectedVillageId } = get();
     return villages.find((v) => v.id === selectedVillageId);
+  },
+
+  getApprovedVillages: () => {
+    return get().villages.filter((v) => v.status === 'approved');
+  },
+
+  getPendingVillages: () => {
+    return get().villages.filter((v) => v.status === 'pending');
   },
 }));

@@ -6,6 +6,7 @@ const modules: { key: AgentModule; icon: string; label: string; desc: string }[]
   { key: 'needs_report', icon: '📋', label: '需求上报', desc: '基层需求在线提交' },
   { key: 'match', icon: '🎯', label: '智能匹配', desc: '队伍与乡村精准匹配' },
   { key: 'plan', icon: '📝', label: '方案生成', desc: '实践方案辅助生成' },
+  { key: 'create_village', icon: '🏘️', label: '登记村庄', desc: '提交未覆盖的村庄信息' },
 ];
 
 export default function Sidebar() {
@@ -17,9 +18,10 @@ export default function Sidebar() {
   const addMessage = useAppStore((s) => s.addMessage);
   const villages = useAppStore((s) => s.villages);
 
+  const approved = villages.filter((v) => v.status === 'approved');
   let pendingNeedsCount = 0;
   let grayCount = 0;
-  for (const v of villages) {
+  for (const v of approved) {
     if (v.visitCount === 0) grayCount++;
     for (const n of v.needs) {
       if (n.status === 'pending') pendingNeedsCount++;
@@ -37,6 +39,13 @@ export default function Sidebar() {
         id: `msg_${Date.now()}`,
         role: 'agent',
         content: '已切换到**👥 创建队伍**模块。请填写队伍信息注册新实践团队，注册后即可参与智能匹配。',
+        timestamp: Date.now(),
+      });
+    } else if (key === 'create_village') {
+      addMessage({
+        id: `msg_${Date.now()}`,
+        role: 'agent',
+        content: '已切换到**🏘️ 登记村庄**模块。请填写未覆盖的村庄信息，提交后需管理员审核通过，才会上线到地图。',
         timestamp: Date.now(),
       });
     } else {
@@ -145,7 +154,7 @@ export default function Sidebar() {
           {sidebarOpen && (
             <div className="sidebar-stats">
               <div className="stat-mini">
-                <div className="stat-mini-value">{villages.length}</div>
+                <div className="stat-mini-value">{approved.length}</div>
                 <div className="stat-mini-label">覆盖乡村</div>
               </div>
               <div className="stat-mini">

@@ -6,7 +6,7 @@ import type { Village, Team, NeedCategory } from '../types';
 export const GD_CENTER = { lat: 23.35, lng: 113.50 };
 export const GD_ZOOM = 7;
 
-export const mockVillages: Village[] = [
+const _rawVillages = [
   // ===== 珠三角 — 热门区域 =====
   {
     id: 'gd_sz_01', name: '南岭村', province: '广东省', city: '深圳市', county: '龙岗区',
@@ -258,6 +258,10 @@ export const mockVillages: Village[] = [
     matchedTeamIds: [],
   },
 ];
+
+export const mockVillages: Village[] = _rawVillages.map(v => ({
+  ...v, status: 'approved' as const, createdAt: '2026-01-01',
+})) as Village[];
 
 export const mockTeams: Team[] = [
   {

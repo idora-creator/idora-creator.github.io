@@ -10,7 +10,7 @@ const CATEGORIES: NeedCategory[] = [
 ];
 
 export default function NeedsReport() {
-  const villages = useAppStore((s) => s.villages);
+  const villages = useAppStore((s) => s.villages.filter((v) => v.status === 'approved'));
   const addNeed = useAppStore((s) => s.addNeed);
   const addMessage = useAppStore((s) => s.addMessage);
 
