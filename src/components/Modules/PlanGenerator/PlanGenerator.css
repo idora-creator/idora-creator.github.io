@@ -1,0 +1,341 @@
+/* ===== PlanGenerator ===== */
+.plan-generator .plan-input-section {
+  margin-bottom: 24px;
+}
+
+.village-context {
+  padding: 14px;
+  background: #f7fafc;
+  border-radius: 10px;
+  margin-bottom: 16px;
+  border: 1px solid #edf2f7;
+}
+
+.context-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.village-context span {
+  display: block;
+  font-size: 13px;
+  color: #4a5568;
+  line-height: 1.5;
+}
+
+.context-needs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.context-need-tag {
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+}
+
+.context-need-tag.high {
+  background: #fed7d7;
+  color: #9b2c2c;
+}
+
+.context-need-tag.medium {
+  background: #fefcbf;
+  color: #975a16;
+}
+
+.context-need-tag.low {
+  background: #e2e8f0;
+  color: #4a5568;
+}
+
+.days-slider {
+  width: 100%;
+  accent-color: #4299e1;
+  margin-top: 4px;
+}
+
+.slider-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #a0aec0;
+  margin-top: 2px;
+}
+
+.generate-btn {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #6b46c1, #805ad5);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 8px;
+}
+
+.generate-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(107, 70, 193, 0.35);
+}
+
+.generate-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===== 方案文档 ===== */
+.plan-result {
+  margin-top: 8px;
+}
+
+.plan-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.ai-badge {
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f0e6ff, #e6f0ff);
+  color: #6b46c1;
+  font-weight: 600;
+}
+
+.export-btn {
+  padding: 8px 18px;
+  background: #fff;
+  border: 1.5px solid #4299e1;
+  border-radius: 8px;
+  color: #4299e1;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.export-btn:hover {
+  background: #ebf8ff;
+}
+
+.plan-document {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 28px 24px;
+}
+
+.plan-title {
+  font-size: 20px;
+  color: #1a202c;
+  text-align: center;
+  margin: 0 0 12px;
+  line-height: 1.4;
+}
+
+.plan-meta {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  font-size: 13px;
+  color: #718096;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.plan-section {
+  margin-bottom: 24px;
+}
+
+.plan-section h3 {
+  font-size: 15px;
+  color: #2d3748;
+  margin: 0 0 10px;
+}
+
+.plan-section ol,
+.plan-section ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.plan-section li {
+  font-size: 13px;
+  color: #4a5568;
+  line-height: 1.7;
+}
+
+/* 日程表 */
+.activity-table {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.activity-header {
+  display: grid;
+  grid-template-columns: 70px 1fr 1fr 1fr;
+  background: #edf2f7;
+  font-size: 12px;
+  font-weight: 600;
+  color: #4a5568;
+}
+
+.activity-header span {
+  padding: 8px 10px;
+  border-right: 1px solid #e2e8f0;
+}
+
+.activity-row {
+  display: grid;
+  grid-template-columns: 70px 1fr 1fr 1fr;
+  border-top: 1px solid #e2e8f0;
+  font-size: 12px;
+  color: #4a5568;
+}
+
+.activity-row span {
+  padding: 8px 10px;
+  border-right: 1px solid #e2e8f0;
+  line-height: 1.5;
+}
+
+.day-badge {
+  font-weight: 600;
+  color: #2b6cb0;
+}
+
+/* 预算表 */
+.budget-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.budget-table th,
+.budget-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: left;
+}
+
+.budget-table th {
+  background: #edf2f7;
+  font-weight: 600;
+  color: #4a5568;
+}
+
+.budget-table td:nth-child(2) {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.total-row td {
+  border-top: 2px solid #cbd5e0;
+  font-size: 14px;
+}
+
+/* 阶段规划 */
+.schedule-phase {
+  margin-bottom: 14px;
+  padding: 12px;
+  background: #f7fafc;
+  border-radius: 8px;
+  border-left: 3px solid #4299e1;
+}
+
+.phase-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.phase-name {
+  font-weight: 700;
+  font-size: 13px;
+  color: #2d3748;
+}
+
+.phase-time {
+  font-size: 12px;
+  color: #718096;
+}
+
+.schedule-phase ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.schedule-phase li {
+  font-size: 12px;
+  color: #4a5568;
+  line-height: 1.6;
+}
+
+/* ===== Mobile ===== */
+@media (max-width: 768px) {
+  .form-group select {
+    font-size: 16px;
+  }
+
+  .generate-btn {
+    padding: 14px;
+    font-size: 16px;
+  }
+
+  .plan-document {
+    padding: 18px 14px;
+  }
+
+  .plan-title {
+    font-size: 17px;
+  }
+
+  .plan-meta {
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 12px;
+  }
+
+  .activity-header,
+  .activity-row {
+    grid-template-columns: 50px 1fr 1fr 1fr;
+    font-size: 11px;
+  }
+
+  .activity-header span,
+  .activity-row span {
+    padding: 6px 4px;
+  }
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .plan-document,
+  .plan-document * {
+    visibility: visible;
+  }
+  .plan-document {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+}

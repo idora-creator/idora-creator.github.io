@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm create *)",
+      "Bash(npx create-vite@latest temp-app --template react-ts)",
+      "Bash(cp -r temp-app/* .)",
+      "Bash(cp temp-app/.gitignore .)",
+      "Bash(rm -rf temp-app)",
+      "Bash(npm install *)",
+      "Bash(npx tsc *)",
+      "Bash(npx vite *)",
+      "WebFetch(domain:localhost)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5173)",
+      "Bash(curl -s http://localhost:5173)",
+      "Bash(curl -s http://localhost:5173/src/main.tsx)",
+      "Bash(curl -s http://localhost:5173/src/App.tsx)",
+      "Bash(curl -s http://localhost:5173/src/components/Map/HeatMap.tsx)",
+      "Bash(node -e \"console.log\\(require\\('zustand/package.json'\\).version\\)\")",
+      "Bash(curl *)",
+      "Bash(node -e \"const d=require\\('./src/data/gd_geojson.json'\\); console.log\\('Features:', d.features.length\\); d.features.forEach\\(f=>console.log\\(' -', f.properties.name\\)\\)\")",
+      "Bash(npm run *)",
+      "Bash(npx vercel *)",
+      "Bash(git init *)",
+      "Bash(git remote *)",
+      "Bash(git add *)"
+    ]
+  }
+}

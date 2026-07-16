@@ -1,0 +1,218 @@
+.heatmap-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.heatmap-container {
+  width: 100%;
+  height: 100%;
+}
+
+.heatmap-container .map-tile {
+  filter: grayscale(0.3) brightness(0.95);
+}
+
+/* ===== 图例 ===== */
+.heatmap-legend {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  border-radius: 10px;
+  padding: 14px 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+  z-index: 1000;
+  min-width: 160px;
+}
+
+.legend-title {
+  font-weight: 700;
+  font-size: 13px;
+  color: #1a202c;
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 1.5px solid #fff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15);
+}
+
+.legend-label {
+  font-size: 12px;
+  color: #4a5568;
+}
+
+.legend-footer {
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px dashed #e2e8f0;
+  font-size: 11px;
+  color: #a0aec0;
+  font-style: italic;
+}
+
+/* ===== Popup 样式 ===== */
+.custom-popup .leaflet-popup-content-wrapper {
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 0;
+}
+
+.custom-popup .leaflet-popup-content {
+  margin: 0;
+  min-width: 240px;
+}
+
+.village-popup {
+  padding: 14px 16px;
+}
+
+.village-popup h3 {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a202c;
+}
+
+.popup-location {
+  margin: 0 0 10px;
+  font-size: 12px;
+  color: #718096;
+}
+
+.popup-stats {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: #4a5568;
+}
+
+.popup-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.popup-desc {
+  margin: 0 0 8px;
+  font-size: 12px;
+  color: #4a5568;
+  line-height: 1.5;
+}
+
+.popup-needs {
+  font-size: 12px;
+  color: #e53e3e;
+  margin-bottom: 10px;
+}
+
+.popup-btn {
+  width: 100%;
+  padding: 6px 0;
+  border: none;
+  border-radius: 6px;
+  background: #2b6cb0;
+  color: #fff;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.popup-btn:hover {
+  background: #2c5282;
+}
+
+/* ===== City Label ===== */
+.city-label {
+  background: transparent !important;
+  border: none !important;
+}
+
+.city-label-text {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.85);
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #2d3748;
+  white-space: nowrap;
+  pointer-events: none;
+  text-shadow: 0 0 3px rgba(255,255,255,0.8);
+  letter-spacing: 0.5px;
+}
+
+/* ===== Tooltip ===== */
+.village-tooltip {
+  background: rgba(26, 32, 44, 0.88) !important;
+  border: none !important;
+  border-radius: 4px !important;
+  color: #fff !important;
+  font-size: 12px !important;
+  padding: 3px 8px !important;
+}
+
+.village-tooltip::before {
+  border-top-color: rgba(26, 32, 44, 0.88) !important;
+}
+
+/* ===== 响应式 ===== */
+@media (max-width: 768px) {
+  .heatmap-legend {
+    bottom: 76px; /* above mobile nav + fab */
+    right: 8px;
+    padding: 8px 10px;
+    min-width: auto;
+    border-radius: 8px;
+  }
+
+  .legend-title {
+    font-size: 11px;
+  }
+
+  .legend-label {
+    font-size: 10px;
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+  }
+
+  .legend-item {
+    margin-bottom: 4px;
+  }
+
+  .custom-popup .leaflet-popup-content {
+    min-width: 200px;
+  }
+
+  .village-popup {
+    padding: 10px 12px;
+  }
+
+  .village-popup h3 {
+    font-size: 14px;
+  }
+}

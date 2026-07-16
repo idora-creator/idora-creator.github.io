@@ -1,0 +1,257 @@
+/* ================================================================
+   App Layout — 桌面端三栏 / 移动端单栏 + 底部导航
+   ================================================================ */
+
+/* ===== Base ===== */
+.app-layout {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh; /* mobile dynamic viewport */
+  overflow: hidden;
+  background: #f7fafc;
+}
+
+/* ===== Main Area ===== */
+.main-area {
+  flex: 1;
+  position: relative;
+  display: flex;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.map-section {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.map-section.with-module {
+  top: 0;
+  bottom: 50%;
+}
+
+/* ===== Module Overlay ===== */
+.module-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  z-index: 10;
+  background: #fff;
+  border-top: 2px solid #e2e8f0;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.module-overlay-header {
+  display: none; /* desktop: hidden */
+}
+
+/* ===== Agent Section (desktop sidebar) ===== */
+.agent-section {
+  width: 280px;
+  flex-shrink: 0;
+  height: 100vh;
+}
+
+.agent-section > .agent-section-inner {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== Mobile: Bottom Nav, FAB, Agent Header ===== */
+.mobile-bottom-nav,
+.mobile-agent-fab,
+.mobile-agent-header {
+  display: none;
+}
+
+/* ================================================================
+   Tablet: agent below map, modules on top
+   ================================================================ */
+@media (max-width: 1024px) {
+  .agent-section {
+    width: 240px;
+  }
+}
+
+@media (max-width: 860px) {
+  .agent-section {
+    width: 260px;
+  }
+
+  .module-overlay {
+    height: 45%;
+  }
+  .map-section.with-module {
+    bottom: 45%;
+  }
+}
+
+/* ================================================================
+   Mobile (< 768px): full-screen map, drawer sidebar,
+   bottom-sheet agent, bottom nav bar
+   ================================================================ */
+@media (max-width: 768px) {
+  /* stack: map fills screen, everything else is overlay */
+  .app-layout {
+    flex-direction: column;
+  }
+
+  .main-area {
+    flex: 1;
+    position: relative;
+  }
+
+  /* map always full screen on mobile */
+  .map-section,
+  .map-section.with-module {
+    position: absolute;
+    inset: 0;
+    bottom: 60px; /* space for bottom nav */
+  }
+
+  /* module overlay: slides up from bottom */
+  .module-overlay {
+    position: absolute;
+    inset: 0;
+    bottom: 60px; /* above bottom nav */
+    z-index: 50;
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.15);
+    height: auto;
+  }
+
+  .module-overlay-header {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px 14px 0;
+    flex-shrink: 0;
+  }
+
+  .module-back-btn {
+    padding: 6px 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    background: #fff;
+    font-size: 13px;
+    color: #4a5568;
+    cursor: pointer;
+  }
+
+  /* agent: bottom sheet, hidden by default */
+  .agent-section {
+    position: fixed;
+    inset: 0;
+    top: auto;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    z-index: 100;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+  }
+
+  .agent-section.mobile-open {
+    transform: translateY(0);
+  }
+
+  .mobile-agent-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    background: #fff;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 15px;
+    font-weight: 700;
+    color: #1a202c;
+    flex-shrink: 0;
+  }
+
+  .mobile-agent-close {
+    padding: 6px 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    background: #fff;
+    font-size: 13px;
+    color: #4a5568;
+    cursor: pointer;
+  }
+
+  /* bottom nav bar */
+  .mobile-bottom-nav {
+    display: flex;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: #fff;
+    border-top: 1px solid #e2e8f0;
+    z-index: 60;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.06);
+  }
+
+  .mobile-bottom-nav .nav-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: #718096;
+    transition: color 0.15s;
+    padding: 6px 0;
+  }
+
+  .mobile-bottom-nav .nav-btn.active {
+    color: #2b6cb0;
+  }
+
+  .nav-btn-icon {
+    font-size: 20px;
+  }
+
+  .nav-btn-label {
+    font-size: 10px;
+    font-weight: 500;
+  }
+
+  /* FAB for agent */
+  .mobile-agent-fab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: 72px;
+    right: 16px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: none;
+    background: #2b6cb0;
+    color: #fff;
+    font-size: 22px;
+    box-shadow: 0 4px 14px rgba(43, 108, 176, 0.4);
+    cursor: pointer;
+    z-index: 40;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .mobile-agent-fab:active {
+    transform: scale(0.92);
+  }
+}

@@ -1,0 +1,246 @@
+.module-panel {
+  padding: 20px 24px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.module-header {
+  margin-bottom: 20px;
+}
+
+.module-header h2 {
+  margin: 0 0 6px;
+  font-size: 20px;
+  color: #1a202c;
+}
+
+.module-subtitle {
+  margin: 0;
+  font-size: 13px;
+  color: #718096;
+  line-height: 1.5;
+}
+
+/* ===== 表单通用 ===== */
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.form-group .required {
+  color: #e53e3e;
+}
+
+.form-group select,
+.form-group input[type="text"],
+.form-group textarea {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #2d3748;
+  background: #fff;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.form-group select:focus,
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #4299e1;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+}
+
+.form-row {
+  display: flex;
+  gap: 12px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+/* ===== Needs Report ===== */
+.needs-report .category-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.category-chip {
+  padding: 8px 4px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.category-chip:hover {
+  border-color: #4299e1;
+  background: #ebf8ff;
+}
+
+.category-chip.active {
+  border-color: #2b6cb0;
+  background: #2b6cb0;
+  color: #fff;
+}
+
+.urgency-group {
+  display: flex;
+  gap: 8px;
+}
+
+.urgency-chip {
+  flex: 1;
+  padding: 8px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.urgency-chip.high.active {
+  border-color: #e53e3e;
+  background: #fff5f5;
+}
+
+.urgency-chip.medium.active {
+  border-color: #d69e2e;
+  background: #fffff0;
+}
+
+.urgency-chip.low.active {
+  border-color: #38a169;
+  background: #f0fff4;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #2b6cb0, #4299e1);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 8px;
+}
+
+.submit-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(43, 108, 176, 0.35);
+}
+
+.submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.submit-success {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.success-icon {
+  font-size: 56px;
+  margin-bottom: 16px;
+}
+
+.submit-success h3 {
+  margin: 0 0 8px;
+  color: #2b6cb0;
+  font-size: 22px;
+}
+
+.submit-success p {
+  color: #718096;
+}
+
+.existing-needs {
+  margin-bottom: 16px;
+  padding: 12px;
+  background: #f7fafc;
+  border-radius: 8px;
+}
+
+.existing-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #4a5568;
+  margin-bottom: 8px;
+}
+
+.existing-need-tag {
+  font-size: 12px;
+  padding: 5px 8px;
+  margin-bottom: 4px;
+  border-radius: 4px;
+  background: #edf2f7;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.status-tag {
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.status-tag.pending {
+  background: #fefcbf;
+  color: #975a16;
+}
+
+.status-tag.matched {
+  background: #bee3f8;
+  color: #2a4365;
+}
+
+.status-tag.fulfilled {
+  background: #c6f6d5;
+  color: #22543d;
+}
+
+/* ===== Mobile ===== */
+@media (max-width: 768px) {
+  .module-panel {
+    padding: 14px 16px;
+  }
+
+  .needs-report .category-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .form-group select,
+  .form-group input[type="text"],
+  .form-group textarea {
+    font-size: 16px; /* prevent iOS zoom */
+    padding: 10px 12px;
+  }
+
+  .submit-btn {
+    padding: 14px;
+    font-size: 16px;
+  }
+}

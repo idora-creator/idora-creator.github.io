@@ -1,0 +1,267 @@
+/* ===== Village Detail Panel ===== */
+.village-detail-panel {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  z-index: 1000;
+  width: 360px;
+  max-height: calc(100vh - 180px);
+  overflow-y: auto;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(12px);
+  border-radius: 14px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+  padding: 20px;
+}
+
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: #edf2f7;
+  color: #718096;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+
+.close-btn:hover {
+  background: #e2e8f0;
+  color: #2d3748;
+}
+
+.vd-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.vd-header h2 {
+  margin: 0;
+  font-size: 20px;
+  color: #1a202c;
+}
+
+.vd-badge {
+  padding: 3px 10px;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.vd-meta {
+  margin-bottom: 10px;
+}
+
+.vd-meta-item {
+  margin-bottom: 4px;
+}
+
+.vd-meta-row {
+  display: flex;
+  gap: 24px;
+}
+
+.meta-label {
+  font-size: 11px;
+  color: #a0aec0;
+  margin-right: 6px;
+}
+
+.meta-value {
+  font-size: 13px;
+  color: #4a5568;
+}
+
+.vd-desc {
+  font-size: 13px;
+  color: #4a5568;
+  line-height: 1.6;
+  margin: 0 0 14px;
+  padding: 12px;
+  background: #f7fafc;
+  border-radius: 8px;
+}
+
+/* ===== Needs List ===== */
+.vd-section {
+  margin-bottom: 14px;
+}
+
+.vd-section h4 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #2d3748;
+  margin: 0 0 8px;
+}
+
+.section-count {
+  font-size: 11px;
+  padding: 1px 7px;
+  border-radius: 8px;
+  background: #edf2f7;
+  color: #4a5568;
+}
+
+.vd-needs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.vd-need-card {
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #f7fafc;
+  border-left: 3px solid #e2e8f0;
+}
+
+.vd-need-card.high {
+  border-left-color: #e53e3e;
+  background: #fff5f5;
+}
+
+.vd-need-card.medium {
+  border-left-color: #d69e2e;
+  background: #fffff0;
+}
+
+.vd-need-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.vd-need-cat {
+  font-size: 11px;
+  font-weight: 600;
+  color: #2b6cb0;
+}
+
+.vd-need-urgency {
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 6px;
+}
+
+.vd-need-urgency.high {
+  background: #fed7d7;
+  color: #9b2c2c;
+}
+
+.vd-need-urgency.medium {
+  background: #fefcbf;
+  color: #975a16;
+}
+
+.vd-need-urgency.low {
+  background: #e2e8f0;
+  color: #4a5568;
+}
+
+.vd-need-status {
+  margin-left: auto;
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 6px;
+}
+
+.vd-need-status.pending {
+  background: #fefcbf;
+  color: #975a16;
+}
+
+.vd-need-status.matched {
+  background: #bee3f8;
+  color: #2a4365;
+}
+
+.vd-need-status.fulfilled {
+  background: #c6f6d5;
+  color: #22543d;
+}
+
+.vd-need-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 2px;
+}
+
+.vd-need-desc {
+  font-size: 12px;
+  color: #718096;
+  line-height: 1.4;
+}
+
+/* ===== Actions ===== */
+.vd-actions {
+  margin-top: 4px;
+}
+
+.vd-callout {
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.vd-callout.urgent {
+  background: #fff5f5;
+  border: 1px solid #fed7d7;
+  color: #9b2c2c;
+}
+
+.vd-callout.warning {
+  background: #fffff0;
+  border: 1px solid #fefcbf;
+  color: #975a16;
+}
+
+.vd-action-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.vd-action-btns button {
+  width: 100%;
+  padding: 9px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: left;
+}
+
+.vd-action-btns button:hover {
+  border-color: #4299e1;
+  background: #ebf8ff;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .village-detail-panel {
+    left: 8px;
+    right: 8px;
+    bottom: 68px; /* above bottom nav */
+    width: auto;
+    max-height: 45vh;
+    border-radius: 12px;
+  }
+}
